@@ -4,22 +4,71 @@ import ro.jademy.exceptions.EmailAddressException;
 import ro.jademy.exceptions.NameException;
 import ro.jademy.exceptions.PhoneNumberException;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
     private static Agenda agenda = new Agenda();
+    private static final String FIRST_NAME = "First_Name";
+    private static final String LAST_NAME = "Last_Name";
+    private static final String PHONE_NUMBER = "Phone_Number";
+    private static final String EMAIL_ADDRESS = "Email_Address";
 
     public static void main(String[] args) {
-        agenda.addContact("Nicu", "Seder", "0755806192", "nicu.seder@gmail.com");
+        /*agenda.addContact("Nicu", "Seder", "0755806192", "nicu.seder@gmail.com");
         agenda.addContact("Patricia", "Seder", "0744987134", "patricia.seder@gmail.com");
-        agenda.addContact("Vasile", "Vasilescu", "07346987133", "vasile.vasilescu@gmail.com");
+        agenda.addContact("Vasile", "Vasilescu", "0734698713", "vasile.vasilescu@gmail.com");
         agenda.addContact("Alin", "Aioanei", "0725806192", "alin.aioanei@gmail.com");
-        agenda.addContact("Bogdan", "Bica", "0753806192", "bogdan.bica@gmail.com");
+        agenda.addContact("Bogdan", "Bica", "0753806192", "bogdan.bica@gmail.com");*/
+
+        Map<String, Integer> table = new TreeMap<>();
+
+        BufferedReader bufferedReader;
+        try {
+            bufferedReader = new BufferedReader(new FileReader("contacts2.csv"));
+            try {
+                boolean isFirstLine = true;
+                while (bufferedReader.ready()) {
+                    String line = bufferedReader.readLine();
+                    String[] lineArr = line.split(",");
+                    if(isFirstLine){
+                        // first line, we map the columns to an index
+                        for(int i = 0;i < lineArr.length;i++) {
+                            switch (lineArr[i]){
+                                case FIRST_NAME:table.put(FIRST_NAME,i);break;
+                                case LAST_NAME:table.put(LAST_NAME,i);break;
+                                case PHONE_NUMBER:table.put(PHONE_NUMBER,i);break;
+                                case EMAIL_ADDRESS:table.put(EMAIL_ADDRESS,i);break;
+                                default:
+                                    System.out.println("There is no such column");
+                                    break;
+                            }
+                        }
+                        isFirstLine = false;
+                        continue;
+                    }
+                    agenda.addContact(lineArr[table.get(FIRST_NAME)],lineArr[table.get(LAST_NAME)],lineArr[table.get(PHONE_NUMBER)],lineArr[table.get(EMAIL_ADDRESS)]);
+                }
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
+            bufferedReader.close();
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex.getMessage());
+        } catch (IOException ex) {
+            System.out.println();
+        }
+
         openAgenda();
     }
 
-    private static void openAgenda(){
+    private static void openAgenda() {
         System.out.println("------------PHONE AGENDA------------");
         System.out.println("1. List contacts");
         System.out.println("2. Add contact");
@@ -30,10 +79,10 @@ public class Main {
         System.out.println("------------------------------------");
 
         int opt = scanner.nextInt();
-        if(opt < 1 || opt > 6){
+        if (opt < 1 || opt > 6) {
             System.out.println("Insert option betwen 1-6");
             openAgenda();
-        }else {
+        } else {
             checkAgendaChosenOption(opt);
         }
         openAgenda();

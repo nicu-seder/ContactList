@@ -19,8 +19,4 @@ public class EmailAddressException extends Exception{
     public EmailAddressException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
-
-    public void exceptionMessage(){
-        System.out.println("Email address is invalid");
-    }
 }

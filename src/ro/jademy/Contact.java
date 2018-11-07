@@ -82,8 +82,7 @@ public class Contact implements Comparable<Contact> {
         return 0;
     }
 
-    public void showContactDetails(){
-        System.out.println(firstName + " " + lastName + "(" + phoneNumber + ")" +
-                ", " + emailAddress);
+     void showContactDetails(){
+         System.out.printf("%-15s%-15s%-15s%-15s\n",lastName,firstName,phoneNumber,emailAddress);
     }
 }

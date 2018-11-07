@@ -3,7 +3,7 @@ package ro.jademy;
 import java.util.*;
 
 public class ContactGroup {
-    private Set<Contact> contacts = new HashSet<>();
+    private Set<Contact> contacts = new TreeSet<>();
 
     public ContactGroup() {
 
@@ -31,19 +31,19 @@ public class ContactGroup {
     }
 
     public void showContacts() {
+
         contacts.stream()
                 .sorted()
-                .forEach(t -> System.out.println(t.getFirstName() + " " + t.getLastName() + "(" + t.getPhoneNumber() + ")" +
-                        ", " + t.getEmailAddress()));
+                .forEach(t -> t.showContactDetails());
     }
 
-    public void checkElementExistance(String lastName) {
+    public void checkElementExistence(String lastName) {
         contacts.removeIf(c -> c.getLastName().toLowerCase().equals(lastName));
     }
 
     public void searchContact(String lastName){
         contacts.stream()
                 .filter(t-> t.getLastName().toLowerCase().trim().equals(lastName.toLowerCase().trim()))
-                .forEach(t->t.showContactDetails());
+                .forEach(Contact::showContactDetails);
     }
 }
